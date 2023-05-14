@@ -1,0 +1,36 @@
+{
+  "name": "wp-launchpad/bud-assets",
+  "description": "Renderer library for Launchpad framework",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "type": "library",
+  "authors": [
+    {
+      "name": "coquardcyr",
+      "email": "coquardcyr@gmail.com"
+    }
+  ],
+  "require": {
+    "wp-launchpad/filesystem": "v0.0.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5 || ^8 || ^9",
+    "wp-media/phpunit": "^3.0",
+    "wp-launchpad/cli": "^v1.0.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "LaunchpadBudAssets\\": "inc/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "LaunchpadBudAssets\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
+}
