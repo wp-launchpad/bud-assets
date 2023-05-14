@@ -1,6 +1,6 @@
 {
   "name": "wp-launchpad/bud-assets",
-  "description": "Renderer library for Launchpad framework",
+  "description": "Bud assets mapper library for Launchpad framework",
   "minimum-stability": "stable",
   "license": "proprietary",
   "type": "library",
