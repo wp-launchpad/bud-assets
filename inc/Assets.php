@@ -133,7 +133,7 @@ class Assets
      *
      * @param string $url URL from the asset.
      *
-     * @return string|mixed
+     * @return string
      */
     public function get_real_url(string $url) {
         $assets_path = $this->get_assets_path();
