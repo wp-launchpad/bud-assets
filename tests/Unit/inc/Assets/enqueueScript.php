@@ -8,7 +8,7 @@ use LaunchpadFilesystem\FilesystemBase;
 
 
 use LaunchpadBudAssets\Tests\Unit\TestCase;
-
+use Brain\Monkey\Functions;
 /**
  * @covers \LaunchpadBudAssets\Assets::enqueue_script
  */
@@ -47,10 +47,10 @@ class Test_enqueueScript extends TestCase {
     public function set_up() {
         parent::set_up();
         $this->filesystem = Mockery::mock(FilesystemBase::class);
-        $this->plugin_slug = '';
-        $this->assets_url = '';
-        $this->plugin_version = '';
-        $this->plugin_launcher_file = '';
+        $this->plugin_slug = 'plugin_slug';
+        $this->assets_url = 'http://example.org/wp-content/plugin/assets';
+        $this->plugin_version = '1.0.0';
+        $this->plugin_launcher_file = '/path/wp-content/plugin/plugin_launcher_file';
 
         $this->assets = new Assets($this->filesystem, $this->plugin_slug, $this->assets_url, $this->plugin_version, $this->plugin_launcher_file);
     }
@@ -58,9 +58,25 @@ class Test_enqueueScript extends TestCase {
     /**
      * @dataProvider configTestData
      */
-    public function testShouldDoAsExpected( $config )
+    public function testShouldDoAsExpected( $config, $expected )
     {
-        $this->assets->enqueue_script($config['key'], $config['url'], $config['dependencies'], $config['in_footer']);
+        Functions\when('plugin_dir_url')->justReturn($config['plugin_url']);
+        Functions\when('sanitize_key')->returnArg();
 
+        foreach ($expected['scripts'] as $item) {
+            Functions\expect('wp_enqueue_script')->with($item['key'], $item['url'], $item['dependencies'], $expected['plugin_version'], $expected['in_footer']);
+        }
+
+        $this->configureFilesystem($config, $expected);
+
+        $this->assets->enqueue_script($config['key'], $config['url'], $config['dependencies'], $config['in_footer']);
+    }
+
+    protected function configureFilesystem($config, $expected) {
+        $this->filesystem->expects()->exists($expected['entrypoints_path'])->andReturn($config['exists']);
+        if(! $config['exists']) {
+            return;
+        }
+        $this->filesystem->expects()->get_contents($expected['entrypoints_path'])->andReturn($config['content']);
     }
 }

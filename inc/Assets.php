@@ -135,7 +135,7 @@ class Assets
      *
      * @return string|mixed
      */
-    protected function get_real_url(string $url) {
+    public function get_real_url(string $url) {
         $assets_path = $this->get_assets_path();
         $manifest_path = $assets_path . DIRECTORY_SEPARATOR . self::MANIFEST_FILE;
 
