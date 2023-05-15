@@ -1,13 +1,10 @@
 <?php
 return [
-    '' => [
+    'shouldReturnFullKey' => [
         'config' => [
-              'key' => '',
-
+              'key' => 'key',
         ],
-        'expected' => [
-
-        ]
+        'expected' => 'plugin_slugkey'
     ],
 
 ];
