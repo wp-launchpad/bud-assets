@@ -48,9 +48,18 @@ class Assets
      */
     protected $assets_path = '';
 
-
+    /**
+     * Entrypoint filename.
+     *
+     * @var  string
+     */
     const ENTRYPOINTS_FILE = 'entrypoints.json';
 
+    /*
+     * Manifest filename.
+     *
+     * @var string
+     */
     const MANIFEST_FILE = 'manifest.json';
 
     /**
