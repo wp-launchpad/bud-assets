@@ -129,6 +129,22 @@ class Assets
     }
 
     /**
+     * Register style.
+     *
+     * @param string $key style key.
+     * @param string $url style URL.
+     * @param array $dependencies style
+     * @param string $media which media the style should display.
+     * @return void
+     */
+    public function register_style(string $key, string $url, array $dependencies = [], string $media = 'all')
+    {
+        $style_url = $this->fetch_real_style($url, $dependencies, $media);
+
+        wp_register_style($this->get_full_key($key), $style_url, $dependencies, $this->plugin_version, $media);
+    }
+
+    /**
      * Get the real URL from an asset.
      *
      * @param string $url URL from the asset.
