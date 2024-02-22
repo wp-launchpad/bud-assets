@@ -91,7 +91,7 @@ class Assets
      * @return void
      */
     public function enqueue_script(string $key, string $url, array $dependencies = [], bool $in_footer = false) {
-        $script_url = $this->fetch_real_script($url, $dependencies, $in_footer);
+        list($script_url, $dependencies) = $this->fetch_real_script($url, $dependencies, $in_footer);
 
         wp_enqueue_script($this->get_full_key($key), $script_url, $dependencies, $this->plugin_version, $in_footer);
     }
@@ -108,7 +108,7 @@ class Assets
      */
     public function register_script(string $key, string $url, array $dependencies = [], bool $in_footer = false)
     {
-        $script_url = $this->fetch_real_script($url, $dependencies, $in_footer);
+        list($script_url, $dependencies) = $this->fetch_real_script($url, $dependencies, $in_footer);
 
         wp_register_script($this->get_full_key($key), $script_url, $dependencies, $this->plugin_version, $in_footer);
     }
@@ -123,7 +123,7 @@ class Assets
      * @return void
      */
     public function enqueue_style(string $key, string $url, array $dependencies = [], string $media = 'all') {
-        $style_url = $this->fetch_real_style($url, $dependencies, $media);
+        list($style_url, $dependencies) = $this->fetch_real_style($url, $dependencies, $media);
 
         wp_enqueue_style($this->get_full_key($key), $style_url, $dependencies, $this->plugin_version, $media);
     }
@@ -139,7 +139,7 @@ class Assets
      */
     public function register_style(string $key, string $url, array $dependencies = [], string $media = 'all')
     {
-        $style_url = $this->fetch_real_style($url, $dependencies, $media);
+        list($style_url, $dependencies) = $this->fetch_real_style($url, $dependencies, $media);
 
         wp_register_style($this->get_full_key($key), $style_url, $dependencies, $this->plugin_version, $media);
     }
@@ -175,9 +175,9 @@ class Assets
      * @param array $dependencies style
      * @param string $media which media the style should display.
      *
-     * @return string
+     * @return array
      */
-    protected function fetch_real_style(string $url, array $dependencies = [], string $media = 'all'): string
+    protected function fetch_real_style(string $url, array $dependencies = [], string $media = 'all'): array
     {
         $bud_dependencies = $this->find_bud_dependencies($url);
         if(count($bud_dependencies) === 0) {
@@ -194,7 +194,7 @@ class Assets
             $dependencies []= $full_key;
         }
 
-        return $last_url;
+        return [$last_url, $dependencies];
     }
 
     /**
@@ -204,9 +204,9 @@ class Assets
      * @param array $dependencies script dependencies.
      * @param bool $in_footer is the script in the footer.
      *
-     * @return string
+     * @return array
      */
-    protected function fetch_real_script(string $url, array $dependencies = [], bool $in_footer = false): string
+    protected function fetch_real_script(string $url, array $dependencies = [], bool $in_footer = false): array
     {
         $bud_dependencies = $this->find_bud_dependencies($url);
         if(count($bud_dependencies) === 0) {
@@ -223,7 +223,7 @@ class Assets
             $dependencies []= $full_key;
         }
 
-        return $last_url;
+        return [$last_url, $dependencies];
     }
 
     /**
