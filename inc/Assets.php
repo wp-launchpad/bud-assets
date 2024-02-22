@@ -91,22 +91,26 @@ class Assets
      * @return void
      */
     public function enqueue_script(string $key, string $url, array $dependencies = [], bool $in_footer = false) {
-        $bud_dependencies = $this->find_bud_dependencies($url);
-        if(count($bud_dependencies) === 0) {
-            $bud_dependencies = [
-                $url,
-            ];
-        }
+        $script_url = $this->fetch_real_script($url, $dependencies, $in_footer);
 
-        $last_url = array_pop($bud_dependencies);
+        wp_enqueue_script($this->get_full_key($key), $script_url, $dependencies, $this->plugin_version, $in_footer);
+    }
 
-        foreach ($bud_dependencies as $bud_dependency) {
-            $full_key = $this->generate_key($bud_dependency);
-            wp_register_script($full_key, $bud_dependency, $dependencies, $this->plugin_version, $in_footer);
-            $dependencies []= $full_key;
-        }
+    /**
+     * Register a script.
+     *
+     * @param string $key script key.
+     * @param string $url script url.
+     * @param array $dependencies script dependencies.
+     * @param bool $in_footer is the script in the footer.
+     *
+     * @return void
+     */
+    public function register_script(string $key, string $url, array $dependencies = [], bool $in_footer = false)
+    {
+        $script_url = $this->fetch_real_script($url, $dependencies, $in_footer);
 
-        wp_enqueue_script($this->get_full_key($key), $last_url, $dependencies, $this->plugin_version, $in_footer);
+        wp_register_script($this->get_full_key($key), $script_url, $dependencies, $this->plugin_version, $in_footer);
     }
 
     /**
@@ -119,22 +123,9 @@ class Assets
      * @return void
      */
     public function enqueue_style(string $key, string $url, array $dependencies = [], string $media = 'all') {
-        $bud_dependencies = $this->find_bud_dependencies($url);
-        if(count($bud_dependencies) === 0) {
-            $bud_dependencies = [
-                $url,
-            ];
-        }
+        $style_url = $this->fetch_real_style($url, $dependencies, $media);
 
-        $last_url = array_pop($bud_dependencies);
-
-        foreach ($bud_dependencies as $bud_dependency) {
-            $full_key = $this->generate_key($bud_dependency);
-            wp_register_style($full_key, $bud_dependency, $dependencies, $this->plugin_version, $media);
-            $dependencies []= $full_key;
-        }
-
-        wp_enqueue_style($this->get_full_key($key), $last_url, $dependencies, $this->plugin_version, $media);
+        wp_enqueue_style($this->get_full_key($key), $style_url, $dependencies, $this->plugin_version, $media);
     }
 
     /**
@@ -159,6 +150,64 @@ class Assets
         }
 
         return $manifest[$url];
+    }
+
+    /**
+     * Fetch the real url from the style and register its dependencies.
+     *
+     * @param string $url style URL.
+     * @param array $dependencies style
+     * @param string $media which media the style should display.
+     *
+     * @return string
+     */
+    protected function fetch_real_style(string $url, array $dependencies = [], string $media = 'all'): string
+    {
+        $bud_dependencies = $this->find_bud_dependencies($url);
+        if(count($bud_dependencies) === 0) {
+            $bud_dependencies = [
+                $url,
+            ];
+        }
+
+        $last_url = array_pop($bud_dependencies);
+
+        foreach ($bud_dependencies as $bud_dependency) {
+            $full_key = $this->generate_key($bud_dependency);
+            wp_register_style($full_key, $bud_dependency, $dependencies, $this->plugin_version, $media);
+            $dependencies []= $full_key;
+        }
+
+        return $last_url;
+    }
+
+    /**
+     * Fetch the real url from the script and register its dependencies.
+     *
+     * @param string $url script url.
+     * @param array $dependencies script dependencies.
+     * @param bool $in_footer is the script in the footer.
+     *
+     * @return string
+     */
+    protected function fetch_real_script(string $url, array $dependencies = [], bool $in_footer = false): string
+    {
+        $bud_dependencies = $this->find_bud_dependencies($url);
+        if(count($bud_dependencies) === 0) {
+            $bud_dependencies = [
+                $url,
+            ];
+        }
+
+        $last_url = array_pop($bud_dependencies);
+
+        foreach ($bud_dependencies as $bud_dependency) {
+            $full_key = $this->generate_key($bud_dependency);
+            wp_register_script($full_key, $bud_dependency, $dependencies, $this->plugin_version, $in_footer);
+            $dependencies []= $full_key;
+        }
+
+        return $last_url;
     }
 
     /**
@@ -214,8 +263,8 @@ class Assets
         $plugin_url = plugin_dir_url($this->plugin_launcher_file);
         $plugin_dir = dirname($this->plugin_launcher_file);
         $assets_path = str_replace($plugin_url, '', $this->assets_url);
-        $assets_path = $plugin_dir . '/' . $assets_path;
-        $this->assets_path = str_replace('/', DIRECTORY_SEPARATOR, $assets_path);
+        $assets_path = $plugin_dir . DIRECTORY_SEPARATOR . $assets_path;
+        $this->assets_path = str_replace(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $assets_path);
 
         return $this->assets_path;
     }
