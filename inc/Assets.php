@@ -102,7 +102,7 @@ class Assets
 
         foreach ($bud_dependencies as $bud_dependency) {
             $full_key = $this->generate_key($bud_dependency);
-            wp_enqueue_script($full_key, $bud_dependency, $dependencies, $this->plugin_version, $in_footer);
+            wp_register_script($full_key, $bud_dependency, $dependencies, $this->plugin_version, $in_footer);
             $dependencies []= $full_key;
         }
 
@@ -130,7 +130,7 @@ class Assets
 
         foreach ($bud_dependencies as $bud_dependency) {
             $full_key = $this->generate_key($bud_dependency);
-            wp_enqueue_style($full_key, $bud_dependency, $dependencies, $this->plugin_version, $media);
+            wp_register_style($full_key, $bud_dependency, $dependencies, $this->plugin_version, $media);
             $dependencies []= $full_key;
         }
 
