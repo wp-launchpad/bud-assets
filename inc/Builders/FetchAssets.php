@@ -107,10 +107,25 @@ trait FetchAssets {
 		return $this->get_plugin_version() . sanitize_key($url);
 	}
 
+	/**
+	 * Get the plugin version.
+	 *
+	 * @return string
+	 */
 	abstract protected function get_plugin_version(): string;
 
+	/**
+	 * Get the plugin assets URL.
+	 *
+	 * @return string
+	 */
 	abstract protected function get_assets_url(): string;
 
+	/**
+	 * Get the filesystem.
+	 *
+	 * @return FilesystemBase
+	 */
 	abstract protected function get_filesystem(): FilesystemBase;
 
 }

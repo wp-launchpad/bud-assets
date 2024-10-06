@@ -4,13 +4,27 @@ namespace LaunchpadBudAssets\Builders;
 
 class JavascriptBuilder extends AssetBuilder {
 
+	/**
+	 * Is the script in the footer?
+	 *
+	 * @var bool
+	 */
 	protected $in_footer = false;
 
+	/**
+	 * The script is in the footer.
+	 * @return $this
+	 */
 	public function in_footer(): self {
 		$this->in_footer = true;
 		return $this;
 	}
 
+	/**
+	 * Enqueue the script.
+	 *
+	 * @return string
+	 */
 	public function enqueue(): string {
 
 		$key = $this->get_full_key($this->key);
@@ -22,6 +36,11 @@ class JavascriptBuilder extends AssetBuilder {
 		return $key;
 	}
 
+	/**
+	 * Register the script.
+	 *
+	 * @return string
+	 */
 	public function register(): string {
 		$key = $this->get_full_key($this->key);
 

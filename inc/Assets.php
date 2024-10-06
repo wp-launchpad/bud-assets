@@ -55,6 +55,7 @@ class Assets
 
     /**
      * Entrypoint filename.
+	 * @deprecated
      *
      * @var  string
      */
@@ -224,14 +225,29 @@ class Assets
 		return new CSSBuilder($url, $this->plugin_slug, $this->plugin_version, $this->assets_url, $this->filesystem);
 	}
 
+	/**
+	 * Get the plugin version.
+	 *
+	 * @return string
+	 */
 	protected function get_plugin_version(): string {
 		return $this->plugin_version;
 	}
 
+	/**
+	 * Get the plugin assets URL.
+	 *
+	 * @return string
+	 */
 	protected function get_assets_url(): string {
 		return $this->assets_url;
 	}
 
+	/**
+	 * Get the filesystem.
+	 *
+	 * @return FilesystemBase
+	 */
 	protected function get_filesystem(): FilesystemBase {
 		return $this->filesystem;
 	}

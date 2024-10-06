@@ -4,13 +4,29 @@ namespace LaunchpadBudAssets\Builders;
 
 class CSSBuilder extends AssetBuilder {
 
+	/**
+	 * On which media the script will be applied.
+	 *
+	 * @var string
+	 */
 	protected $media = 'all';
 
+	/**
+	 * Change medias on which the script going to be applied.
+	 * @param string $media
+	 *
+	 * @return $this
+	 */
 	public function with_media(string $media): self {
 		$this->media = $media;
 		return $this;
 	}
 
+	/**
+	 * Enqueue the style.
+	 *
+	 * @return string
+	 */
 	public function enqueue(): string {
 		list($style_url, $dependencies) = $this->fetch_real_style($this->url, $this->dependencies, $this->media);
 
@@ -21,6 +37,11 @@ class CSSBuilder extends AssetBuilder {
 		return $full_key;
 	}
 
+	/**
+	 * Register the style.
+	 *
+	 * @return string
+	 */
 	public function register(): string {
 		list($style_url, $dependencies) = $this->fetch_real_style($this->url, $this->dependencies, $this->media);
 
