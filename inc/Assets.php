@@ -2,10 +2,15 @@
 
 namespace LaunchpadBudAssets;
 
+use LaunchpadBudAssets\Builders\CSSBuilder;
+use LaunchpadBudAssets\Builders\FetchAssets;
+use LaunchpadBudAssets\Builders\JavascriptBuilder;
 use LaunchpadFilesystem\FilesystemBase;
 
 class Assets
 {
+	use FetchAssets;
+
     /**
      * WordPress filesystem.
      *
@@ -169,94 +174,6 @@ class Assets
     }
 
     /**
-     * Fetch the real url from the style and register its dependencies.
-     *
-     * @param string $url style URL.
-     * @param array $dependencies style
-     * @param string $media which media the style should display.
-     *
-     * @return array
-     */
-    protected function fetch_real_style(string $url, array $dependencies = [], string $media = 'all'): array
-    {
-        $bud_dependencies = $this->find_bud_dependencies($url);
-        if(count($bud_dependencies) === 0) {
-            $bud_dependencies = [
-                $url,
-            ];
-        }
-
-        $last_url = array_pop($bud_dependencies);
-
-        foreach ($bud_dependencies as $bud_dependency) {
-            $full_key = $this->generate_key($bud_dependency);
-            wp_register_style($full_key, $bud_dependency, $dependencies, $this->plugin_version, $media);
-            $dependencies []= $full_key;
-        }
-
-        return [$last_url, $dependencies];
-    }
-
-    /**
-     * Fetch the real url from the script and register its dependencies.
-     *
-     * @param string $url script url.
-     * @param array $dependencies script dependencies.
-     * @param bool $in_footer is the script in the footer.
-     *
-     * @return array
-     */
-    protected function fetch_real_script(string $url, array $dependencies = [], bool $in_footer = false): array
-    {
-        $bud_dependencies = $this->find_bud_dependencies($url);
-        if(count($bud_dependencies) === 0) {
-            $bud_dependencies = [
-                $url,
-            ];
-        }
-
-        $last_url = array_pop($bud_dependencies);
-
-        foreach ($bud_dependencies as $bud_dependency) {
-            $full_key = $this->generate_key($bud_dependency);
-            wp_register_script($full_key, $bud_dependency, $dependencies, $this->plugin_version, $in_footer);
-            $dependencies []= $full_key;
-        }
-
-        return [$last_url, $dependencies];
-    }
-
-    /**
-     * Find dependencies from a bud asset.
-     *
-     * @param string $url asset URL.
-     * @return array
-     */
-    protected function find_bud_dependencies(string $url): array {
-        $url_parts = explode('.', $url);
-        $assets_path = $this->get_assets_path();
-        $entrypoints_path = $assets_path . DIRECTORY_SEPARATOR . self::ENTRYPOINTS_FILE;
-        if( ! $this->filesystem->exists($entrypoints_path)) {
-            return [];
-        }
-
-        $entrypoints = json_decode($this->filesystem->get_contents($entrypoints_path), true);
-        foreach ($url_parts as $part) {
-            if(! is_array($entrypoints) || ! key_exists($part, $entrypoints)) {
-                return [];
-            }
-
-            $entrypoints = $entrypoints[$part];
-        }
-
-        $entrypoints = array_map(function ($entrypoint) {
-            return $this->assets_url . DIRECTORY_SEPARATOR . $entrypoint;
-        }, $entrypoints);
-
-        return $entrypoints;
-    }
-
-    /**
      * Get full key.
      *
      * @param string $key partial key.
@@ -285,14 +202,37 @@ class Assets
         return $this->assets_path;
     }
 
-    /**
-     * Generate a key for the URL.
-     *
-     * @param string $url URL to generate a key for.
-     *
-     * @return string
-     */
-    protected function generate_key(string $url): string {
-        return $this->plugin_slug . sanitize_key($url);
-    }
+	/**
+	 * Define a javascript asset.
+	 *
+	 * @param string $url URL from the asset.
+	 *
+	 * @return JavascriptBuilder
+	 */
+	public function with_js(string $url): JavascriptBuilder {
+		return new JavascriptBuilder($url, $this->plugin_slug, $this->plugin_version, $this->assets_url, $this->filesystem);
+	}
+
+	/**
+	 * define a css asset.
+	 *
+	 * @param string $url URL from the asset.
+	 *
+	 * @return CSSBuilder
+	 */
+	public function with_css(string $url): CSSBuilder {
+		return new CSSBuilder($url, $this->plugin_slug, $this->plugin_version, $this->assets_url, $this->filesystem);
+	}
+
+	protected function get_plugin_version(): string {
+		return $this->plugin_version;
+	}
+
+	protected function get_assets_url(): string {
+		return $this->assets_url;
+	}
+
+	protected function get_filesystem(): FilesystemBase {
+		return $this->filesystem;
+	}
 }
