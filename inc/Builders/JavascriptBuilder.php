@@ -26,8 +26,11 @@ class JavascriptBuilder extends AssetBuilder {
 	 * @return string
 	 */
 	public function enqueue(): string {
+		$key = parent::enqueue();
 
-		$key = $this->get_full_key($this->key);
+		if('' == $key) {
+			return $key;
+		}
 
 		list($script_url, $dependencies) = $this->fetch_real_script($this->url, $this->dependencies, $this->in_footer);
 
@@ -42,7 +45,11 @@ class JavascriptBuilder extends AssetBuilder {
 	 * @return string
 	 */
 	public function register(): string {
-		$key = $this->get_full_key($this->key);
+		$key = parent::register();
+
+		if('' == $key) {
+			return $key;
+		}
 
 		list($script_url, $dependencies) = $this->fetch_real_script($this->url, $this->dependencies, $this->in_footer);
 

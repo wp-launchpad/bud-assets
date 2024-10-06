@@ -192,12 +192,30 @@ abstract class AssetBuilder {
 	 *
 	 * @return string
 	 */
-	abstract public function enqueue(): string;
+	public function enqueue(): string {
+		$full_key = $this->get_full_key($this->key);
+		foreach ($this->queries as $query) {
+			if($query->applies()) {
+				return $full_key;
+			}
+		}
+
+		return '';
+	}
 
 	/**
 	 * Register the asset.
 	 *
 	 * @return string
 	 */
-	abstract public function register(): string;
+	public function register(): string {
+		$full_key = $this->get_full_key($this->key);
+		foreach ($this->queries as $query) {
+			if($query->applies()) {
+				return $full_key;
+			}
+		}
+
+		return '';
+	}
 }

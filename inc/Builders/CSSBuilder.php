@@ -28,13 +28,17 @@ class CSSBuilder extends AssetBuilder {
 	 * @return string
 	 */
 	public function enqueue(): string {
+		$key = parent::enqueue();
+
+		if('' == $key) {
+			return $key;
+		}
+
 		list($style_url, $dependencies) = $this->fetch_real_style($this->url, $this->dependencies, $this->media);
 
-		$full_key = $this->get_full_key($this->key);
+		wp_enqueue_style($key, $style_url, $dependencies, $this->plugin_version, $this->media);
 
-		wp_enqueue_style($full_key, $style_url, $dependencies, $this->plugin_version, $this->media);
-
-		return $full_key;
+		return $key;
 	}
 
 	/**
@@ -43,12 +47,16 @@ class CSSBuilder extends AssetBuilder {
 	 * @return string
 	 */
 	public function register(): string {
+		$key = parent::register();
+
+		if('' == $key) {
+			return $key;
+		}
+
 		list($style_url, $dependencies) = $this->fetch_real_style($this->url, $this->dependencies, $this->media);
 
-		$full_key = $this->get_full_key($this->key);
+		wp_register_style($key, $style_url, $dependencies, $this->plugin_version, $this->media);
 
-		wp_register_style($full_key, $style_url, $dependencies, $this->plugin_version, $this->media);
-
-		return $full_key;
+		return $key;
 	}
 }
