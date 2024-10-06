@@ -47,13 +47,6 @@ class Assets
     protected $plugin_launcher_file = '';
 
     /**
-     * Assets path.
-     *
-     * @var string
-     */
-    protected $assets_path = '';
-
-    /**
      * Entrypoint filename.
 	 * @deprecated
      *
@@ -99,9 +92,16 @@ class Assets
      * @return void
      */
     public function enqueue_script(string $key, string $url, array $dependencies = [], bool $in_footer = false) {
-        list($script_url, $dependencies) = $this->fetch_real_script($url, $dependencies, $in_footer);
+		$script = $this
+			->with_script($url)
+			->with_key($key)
+			->with_dependencies($dependencies);
 
-        wp_enqueue_script($this->get_full_key($key), $script_url, $dependencies, $this->plugin_version, $in_footer);
+		if($in_footer) {
+			$script->in_footer();
+		}
+
+		$script->enqueue();
     }
 
     /**
@@ -118,9 +118,16 @@ class Assets
      */
     public function register_script(string $key, string $url, array $dependencies = [], bool $in_footer = false)
     {
-        list($script_url, $dependencies) = $this->fetch_real_script($url, $dependencies, $in_footer);
+		$script = $this
+			->with_script($url)
+			->with_key($key)
+			->with_dependencies($dependencies);
 
-        wp_register_script($this->get_full_key($key), $script_url, $dependencies, $this->plugin_version, $in_footer);
+		if($in_footer) {
+			$script->in_footer();
+		}
+
+		$script->register();
     }
 
     /**
@@ -135,9 +142,12 @@ class Assets
      * @return void
      */
     public function enqueue_style(string $key, string $url, array $dependencies = [], string $media = 'all') {
-        list($style_url, $dependencies) = $this->fetch_real_style($url, $dependencies, $media);
-
-        wp_enqueue_style($this->get_full_key($key), $style_url, $dependencies, $this->plugin_version, $media);
+		$this
+			->with_style($url)
+			->with_key($key)
+			->with_dependencies($dependencies)
+			->with_media($media)
+			->enqueue();
     }
 
     /**
@@ -153,9 +163,12 @@ class Assets
      */
     public function register_style(string $key, string $url, array $dependencies = [], string $media = 'all')
     {
-        list($style_url, $dependencies) = $this->fetch_real_style($url, $dependencies, $media);
-
-        wp_register_style($this->get_full_key($key), $style_url, $dependencies, $this->plugin_version, $media);
+		$this
+			->with_style($url)
+			->with_key($key)
+			->with_dependencies($dependencies)
+			->with_media($media)
+			->register();
     }
 
     /**
@@ -192,25 +205,6 @@ class Assets
         return $this->plugin_slug . $key;
     }
 
-    /**
-     * Get assets path.
-     *
-     * @return string
-     */
-    protected function get_assets_path(): string {
-        if($this->assets_path) {
-            return $this->assets_path;
-        }
-
-        $plugin_url = plugin_dir_url($this->plugin_launcher_file);
-        $plugin_dir = dirname($this->plugin_launcher_file);
-        $assets_path = str_replace($plugin_url, '', $this->assets_url);
-        $assets_path = $plugin_dir . DIRECTORY_SEPARATOR . $assets_path;
-        $this->assets_path = str_replace(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $assets_path);
-
-        return $this->assets_path;
-    }
-
 	/**
 	 * Define a javascript asset.
 	 *
@@ -218,8 +212,8 @@ class Assets
 	 *
 	 * @return JavascriptBuilder
 	 */
-	public function with_js(string $url): JavascriptBuilder {
-		return new JavascriptBuilder($url, $this->plugin_slug, $this->plugin_version, $this->assets_url, $this->filesystem);
+	public function with_script(string $url): JavascriptBuilder {
+		return new JavascriptBuilder($url, $this->plugin_slug, $this->plugin_version, $this->assets_url, $this->plugin_launcher_file, $this->filesystem);
 	}
 
 	/**
@@ -229,8 +223,8 @@ class Assets
 	 *
 	 * @return CSSBuilder
 	 */
-	public function with_css(string $url): CSSBuilder {
-		return new CSSBuilder($url, $this->plugin_slug, $this->plugin_version, $this->assets_url, $this->filesystem);
+	public function with_style(string $url): CSSBuilder {
+		return new CSSBuilder($url, $this->plugin_slug, $this->plugin_version, $this->assets_url, $this->plugin_launcher_file, $this->filesystem);
 	}
 
 	/**
@@ -262,5 +256,9 @@ class Assets
 
 	protected function get_plugin_slug(): string {
 		return $this->plugin_slug;
+	}
+
+	protected function get_plugin_launcher_file(): string {
+		return $this->plugin_launcher_file;
 	}
 }

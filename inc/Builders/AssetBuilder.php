@@ -49,6 +49,15 @@ abstract class AssetBuilder {
 	 */
 	protected $assets_url = '';
 
+	protected $assets_path = '';
+
+	/**
+	 * Plugin launcher file.
+	 *
+	 * @var string
+	 */
+	protected $plugin_launcher_file = '';
+
 	/**
 	 * Add dependencies to the requirements for the asset.
 	 *
@@ -101,11 +110,12 @@ abstract class AssetBuilder {
 	 * @param string $assets_url Plugin asset URL.
 	 * @param FilesystemBase $filesystem Filesystem.
 	 */
-	public function __construct( string $url, string $plugin_slug, string $plugin_version, string $assets_url, FilesystemBase $filesystem ) {
+	public function __construct( string $url, string $plugin_slug, string $plugin_version, string $assets_url, string $plugin_launcher_file, FilesystemBase $filesystem ) {
 		$this->url            = $url;
 		$this->plugin_slug    = $plugin_slug;
 		$this->plugin_version = $plugin_version;
 		$this->assets_url     = $assets_url;
+		$this->plugin_launcher_file    = $plugin_launcher_file;
 		$this->filesystem     = $filesystem;
 	}
 
@@ -148,6 +158,10 @@ abstract class AssetBuilder {
 
 	protected function get_plugin_slug(): string {
 		return $this->plugin_slug;
+	}
+
+	protected function get_plugin_launcher_file(): string {
+		return $this->plugin_launcher_file;
 	}
 
 	/**

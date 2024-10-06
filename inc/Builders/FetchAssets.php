@@ -9,6 +9,13 @@ trait FetchAssets {
 	protected $entrypoints_file = 'entrypoints.json';
 
 	/**
+	 * Assets path.
+	 *
+	 * @var string
+	 */
+	protected $assets_path = '';
+
+	/**
 	 * Find dependencies from a bud asset.
 	 *
 	 * @param string $url asset URL.
@@ -97,6 +104,25 @@ trait FetchAssets {
 	}
 
 	/**
+	 * Get assets path.
+	 *
+	 * @return string
+	 */
+	protected function get_assets_path(): string {
+		if($this->assets_path) {
+			return $this->assets_path;
+		}
+
+		$plugin_url = plugin_dir_url($this->plugin_launcher_file);
+		$plugin_dir = dirname($this->plugin_launcher_file);
+		$assets_path = str_replace($plugin_url, '', $this->assets_url);
+		$assets_path = $plugin_dir . DIRECTORY_SEPARATOR . $assets_path;
+		$this->assets_path = str_replace(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $assets_path);
+
+		return $this->assets_path;
+	}
+
+	/**
 	 * Generate a key for the URL.
 	 *
 	 * @param string $url URL to generate a key for.
@@ -128,6 +154,7 @@ trait FetchAssets {
 	 */
 	abstract protected function get_assets_url(): string;
 
+	abstract protected function get_plugin_launcher_file(): string;
 	/**
 	 * Get the filesystem.
 	 *
