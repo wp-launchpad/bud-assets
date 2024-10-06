@@ -51,12 +51,35 @@ abstract class AssetBuilder {
 
 	protected $assets_path = '';
 
+	protected $queries = [];
+
 	/**
 	 * Plugin launcher file.
 	 *
 	 * @var string
 	 */
 	protected $plugin_launcher_file = '';
+
+	/**
+	 * Generate a new query.
+	 *
+	 * @return AvailabilityQuery
+	 */
+	public function get_query(): AvailabilityQuery {
+		return new AvailabilityQuery();
+	}
+
+	/**
+	 * Uses a query to add the assets.
+	 *
+	 * @param AvailabilityQuery $query Query to load the asset.
+	 *
+	 * @return $this
+	 */
+	public function with_query(AvailabilityQuery $query): self {
+		$this->queries []= $query;
+		return $this;
+	}
 
 	/**
 	 * Add dependencies to the requirements for the asset.

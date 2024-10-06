@@ -198,6 +198,8 @@ class Assets
     /**
      * Get full key.
      *
+	 * @deprecated
+	 *
      * @param string $key partial key.
      * @return string
      */
