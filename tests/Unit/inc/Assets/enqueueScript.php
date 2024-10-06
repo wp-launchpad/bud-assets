@@ -63,9 +63,13 @@ class Test_enqueueScript extends TestCase {
         Functions\when('plugin_dir_url')->justReturn($config['plugin_url']);
         Functions\when('sanitize_key')->returnArg();
 
-        foreach ($expected['scripts'] as $item) {
+        foreach ($expected['enqueue_scripts'] as $item) {
             Functions\expect('wp_enqueue_script')->with($item['key'], $item['url'], $item['dependencies'], $expected['plugin_version'], $expected['in_footer']);
         }
+
+		foreach ($expected['register_scripts'] as $item) {
+			Functions\expect('wp_register_script')->with($item['key'], $item['url'], $item['dependencies'], $expected['plugin_version'], $expected['in_footer']);
+		}
 
         $this->configureFilesystem($config, $expected);
 

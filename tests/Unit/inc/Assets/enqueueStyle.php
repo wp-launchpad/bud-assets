@@ -64,9 +64,13 @@ class Test_enqueueStyle extends TestCase {
         Functions\when('plugin_dir_url')->justReturn($config['plugin_url']);
         Functions\when('sanitize_key')->returnArg();
 
-        foreach ($expected['styles'] as $item) {
+        foreach ($expected['enqueue_styles'] as $item) {
             Functions\expect('wp_enqueue_style')->with($item['key'], $item['url'], $item['dependencies'], $expected['plugin_version'], $expected['media']);
         }
+
+		foreach ($expected['register_styles'] as $item) {
+			Functions\expect('wp_register_style')->with($item['key'], $item['url'], $item['dependencies'], $expected['plugin_version'], $expected['media']);
+		}
 
         $this->configureFilesystem($config, $expected);
 

@@ -89,6 +89,8 @@ class Assets
     /**
      * Enqueue a script.
      *
+	 * @deprecated
+	 *
      * @param string $key script key.
      * @param string $url script url.
      * @param array $dependencies script dependencies.
@@ -105,7 +107,9 @@ class Assets
     /**
      * Register a script.
      *
-     * @param string $key script key.
+	 * @deprecated
+	 *
+	 * @param string $key script key.
      * @param string $url script url.
      * @param array $dependencies script dependencies.
      * @param bool $in_footer is the script in the footer.
@@ -122,6 +126,8 @@ class Assets
     /**
      * Enqueue style.
      *
+	 * @deprecated
+	 *
      * @param string $key style key.
      * @param string $url style URL.
      * @param array $dependencies style
@@ -137,6 +143,8 @@ class Assets
     /**
      * Register style.
      *
+	 * @deprecated
+	 *
      * @param string $key style key.
      * @param string $url style URL.
      * @param array $dependencies style
@@ -250,5 +258,9 @@ class Assets
 	 */
 	protected function get_filesystem(): FilesystemBase {
 		return $this->filesystem;
+	}
+
+	protected function get_plugin_slug(): string {
+		return $this->plugin_slug;
 	}
 }

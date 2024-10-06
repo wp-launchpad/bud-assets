@@ -23,23 +23,25 @@ return [
             'plugin_version' => '1.0.0',
             'in_footer' => false,
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'scripts' => [
-                [
-                    'key' => 'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.js',
-                    'url' => 'http://example.org/wp-content/plugin/assets/dependency.js',
-                    'dependencies' => [
-                        'jquery',
-                    ],
-                ],
-                [
-                  'key' => 'plugin_slugkey',
-                  'url' => 'http://example.org/wp-content/plugin/assets/app.hash.js',
-                  'dependencies' => [
-                      'jquery',
-                      'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.js'
-                  ],
-                ],
-            ]
+			'enqueue_scripts' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'http://example.org/wp-content/plugin/assets/app.hash.js',
+					'dependencies' => [
+						'jquery',
+						'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.js'
+					],
+				],
+			],
+			'register_scripts' => [
+				[
+					'key' => 'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.js',
+					'url' => 'http://example.org/wp-content/plugin/assets/dependency.js',
+					'dependencies' => [
+						'jquery',
+					],
+				],
+			],
         ]
     ],
     'notBudAssetWithDependenciesShouldRegisterAll' => [
@@ -65,15 +67,17 @@ return [
             'plugin_version' => '1.0.0',
             'in_footer' => false,
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'scripts' => [
-                [
-                    'key' => 'plugin_slugkey',
-                    'url' => 'app2.js',
-                    'dependencies' => [
-                        'jquery',
-                    ],
-                ],
-            ]
+			'enqueue_scripts' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'app2.js',
+					'dependencies' => [
+						'jquery',
+					],
+				],
+			],
+			'register_scripts' => [
+			],
         ]
     ],
     'budAssetWithDependenciesWithoutEntryFileShouldRegisterAlone' => [
@@ -99,14 +103,16 @@ return [
             'plugin_version' => '1.0.0',
             'in_footer' => false,
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'scripts' => [
-                [
-                    'key' => 'plugin_slugkey',
-                    'url' => 'app.js',
-                    'dependencies' => [
-                        'jquery',
-                    ],
-                ],
+			'enqueue_scripts' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'app.js',
+					'dependencies' => [
+						'jquery',
+					],
+				],
+			],
+			'register_scripts' => [
             ]
         ]
     ],
@@ -126,14 +132,17 @@ return [
             'plugin_version' => '1.0.0',
             'in_footer' => false,
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'scripts' => [
-                [
-                    'key' => 'plugin_slugkey',
-                    'url' => 'app.js',
-                    'dependencies' => [
-                        'jquery',
-                    ],
-                ],
+			'enqueue_scripts' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'app.js',
+					'dependencies' => [
+						'jquery',
+					],
+				],
+			],
+			'register_scripts' => [
+
             ]
         ]
     ],

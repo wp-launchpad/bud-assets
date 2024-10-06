@@ -104,7 +104,7 @@ trait FetchAssets {
 	 * @return string
 	 */
 	protected function generate_key(string $url): string {
-		return $this->get_plugin_version() . sanitize_key($url);
+		return $this->get_plugin_slug() . sanitize_key($url);
 	}
 
 	/**
@@ -113,6 +113,13 @@ trait FetchAssets {
 	 * @return string
 	 */
 	abstract protected function get_plugin_version(): string;
+
+	/**
+	 * Get the plugin slug.
+	 *
+	 * @return string
+	 */
+	abstract protected function get_plugin_slug(): string;
 
 	/**
 	 * Get the plugin assets URL.

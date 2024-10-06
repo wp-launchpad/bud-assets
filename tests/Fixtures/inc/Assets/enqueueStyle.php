@@ -23,23 +23,25 @@ return [
             'plugin_version' => '1.0.0',
             'media' => 'all',
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'styles' => [
-                [
-                    'key' => 'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.css',
-                    'url' => 'http://example.org/wp-content/plugin/assets/dependency.css',
-                    'dependencies' => [
-                        'bootstrap',
-                    ],
-                ],
-                [
-                    'key' => 'plugin_slugkey',
-                    'url' => 'http://example.org/wp-content/plugin/assets/app.hash.css',
-                    'dependencies' => [
-                        'bootstrap',
-                        'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.css'
-                    ],
-                ],
-            ]
+            'enqueue_styles' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'http://example.org/wp-content/plugin/assets/app.hash.css',
+					'dependencies' => [
+						'bootstrap',
+						'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.css'
+					],
+				],
+            ],
+			'register_styles' => [
+				[
+					'key' => 'plugin_slughttp://example.org/wp-content/plugin/assets/dependency.css',
+					'url' => 'http://example.org/wp-content/plugin/assets/dependency.css',
+					'dependencies' => [
+						'bootstrap',
+					],
+				],
+			],
         ]
     ],
     'notBudAssetWithDependenciesShouldRegisterAll' => [
@@ -65,15 +67,17 @@ return [
             'plugin_version' => '1.0.0',
             'media' => 'all',
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'styles' => [
-                [
-                    'key' => 'plugin_slugkey',
-                    'url' => 'app2.css',
-                    'dependencies' => [
-                        'bootstrap',
-                    ],
-                ],
-            ]
+            'enqueue_styles' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'app2.css',
+					'dependencies' => [
+						'bootstrap',
+					],
+				],
+            ],
+			'register_styles' => [
+			],
         ]
     ],
     'budAssetWithDependenciesWithoutEntryFileShouldRegisterAlone' => [
@@ -99,15 +103,18 @@ return [
             'plugin_version' => '1.0.0',
             'media' => 'all',
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'styles' => [
-                [
-                    'key' => 'plugin_slugkey',
-                    'url' => 'app.css',
-                    'dependencies' => [
-                        'bootstrap',
-                    ],
-                ],
-            ]
+			'enqueue_styles' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'app.css',
+					'dependencies' => [
+						'bootstrap',
+					],
+				],
+			],
+			'register_styles' => [
+
+			],
         ]
     ],
     'budAssetWithDependenciesWithoutEntryFileContentShouldRegisterAlone' => [
@@ -126,15 +133,17 @@ return [
             'plugin_version' => '1.0.0',
             'media' => 'all',
             'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
-            'styles' => [
-                [
-                    'key' => 'plugin_slugkey',
-                    'url' => 'app.css',
-                    'dependencies' => [
-                        'bootstrap',
-                    ],
-                ],
-            ]
+			'enqueue_styles' => [
+				[
+					'key' => 'plugin_slugkey',
+					'url' => 'app.css',
+					'dependencies' => [
+						'bootstrap',
+					],
+				],
+			],
+			'register_styles' => [
+			],
         ]
     ],
 ];

@@ -146,6 +146,10 @@ abstract class AssetBuilder {
 		return $this->filesystem;
 	}
 
+	protected function get_plugin_slug(): string {
+		return $this->plugin_slug;
+	}
+
 	/**
 	 * Enqueue the asset.
 	 *
