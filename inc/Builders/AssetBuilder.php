@@ -193,14 +193,7 @@ abstract class AssetBuilder {
 	 * @return string
 	 */
 	public function enqueue(): string {
-		$full_key = $this->get_full_key($this->key);
-		foreach ($this->queries as $query) {
-			if($query->applies()) {
-				return $full_key;
-			}
-		}
-
-		return '';
+		return $this->apply_queries();
 	}
 
 	/**
@@ -209,7 +202,21 @@ abstract class AssetBuilder {
 	 * @return string
 	 */
 	public function register(): string {
+		return $this->apply_queries();
+	}
+
+	/**
+	 * Return the key based on the fact the queries are matched.
+	 *
+	 * @return string
+	 */
+	protected function apply_queries(): string {
 		$full_key = $this->get_full_key($this->key);
+
+		if(0 === count($this->queries)) {
+			return $full_key;
+		}
+
 		foreach ($this->queries as $query) {
 			if($query->applies()) {
 				return $full_key;
