@@ -256,10 +256,20 @@ class Assets
 		return $this->filesystem;
 	}
 
+	/**
+	 * Get the plugin slug.
+	 *
+	 * @return string
+	 */
 	protected function get_plugin_slug(): string {
 		return $this->plugin_slug;
 	}
 
+	/**
+	 * Get the plugin launcher file.
+	 *
+	 * @return string
+	 */
 	protected function get_plugin_launcher_file(): string {
 		return $this->plugin_launcher_file;
 	}

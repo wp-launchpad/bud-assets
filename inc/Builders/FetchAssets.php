@@ -154,6 +154,11 @@ trait FetchAssets {
 	 */
 	abstract protected function get_assets_url(): string;
 
+	/**
+	 * Get the plugin launcher file.
+	 *
+	 * @return string
+	 */
 	abstract protected function get_plugin_launcher_file(): string;
 	/**
 	 * Get the filesystem.
