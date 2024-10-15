@@ -80,6 +80,8 @@ class Test_withScript extends TestCase {
 
 		$builder = $this->assets->with_script($config['url']);
 
+		$builder->with_key($config['key']);
+
 		if($config['enqueue']) {
 			$builder = $builder->enqueue();
 		}
