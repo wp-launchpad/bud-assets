@@ -46,7 +46,7 @@ return [
 			'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
 			'enqueue' => true,
 			'register' => false,
-			'return' => 'plugin_slug',
+			'return' => 'plugin_slughttp://example.org/js/example.js',
 		]
 	],
 	'registerShouldCallRegisterFunction' => [
@@ -69,7 +69,7 @@ return [
 			'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
 			'enqueue' => false,
 			'register' => true,
-			'return' => 'plugin_slug',
+			'return' => 'plugin_slughttp://example.org/js/example.js',
 		]
 	]
 ];

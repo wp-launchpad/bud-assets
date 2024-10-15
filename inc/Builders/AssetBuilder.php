@@ -211,6 +211,11 @@ abstract class AssetBuilder {
 	 * @return string
 	 */
 	protected function apply_queries(): string {
+
+		if(! $this->key) {
+			$this->key =$this->url;
+		}
+
 		$full_key = $this->get_full_key($this->key);
 
 		if(0 === count($this->queries)) {
