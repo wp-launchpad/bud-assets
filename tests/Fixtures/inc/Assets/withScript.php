@@ -1,0 +1,50 @@
+<?php
+
+use LaunchpadBudAssets\Builders\JavascriptBuilder;
+
+return [
+    'callWithoutActionShouldReturnBuilderWithoutDoingSomethingElse' => [
+        'config' => [
+			'plugin_url' => 'http://example.org/wp-content/plugin',
+			'enqueue' => false,
+			'url' => 'http://example.org/js/example.js',
+			'called' => false,
+			'content' => json_encode([
+				'app' => [
+					'js' => [
+						'dependency.js',
+						'app.hash.js',
+					]
+				]
+			])
+        ],
+        'expected' => [
+			'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
+			'enqueue' => false,
+			'register' => false,
+			'return' => JavascriptBuilder::class,
+        ]
+    ],
+	'enqueueShouldCallQueueFunction' => [
+		'config' => [
+			'plugin_url' => 'http://example.org/wp-content/plugin',
+			'enqueue' => true,
+			'url' => 'http://example.org/js/example.js',
+			'called' => true,
+			'content' => json_encode([
+				'app' => [
+					'js' => [
+						'dependency.js',
+						'app.hash.js',
+					]
+				]
+			])
+		],
+		'expected' => [
+			'entrypoints_path' => '/path/wp-content/plugin//assets/entrypoints.json',
+			'enqueue' => true,
+			'register' => false,
+			'return' => 'plugin_slug',
+		]
+	]
+];
