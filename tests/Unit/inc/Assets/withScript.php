@@ -71,7 +71,12 @@ class Test_withScript extends TestCase {
 		} else {
 			Functions\expect('wp_enqueue_script');
 		}
-		Functions\expect('wp_register_script')->never();
+
+		if( ! $expected['register']) {
+			Functions\expect('wp_register_script')->never();
+		} else {
+			Functions\expect('wp_register_script');
+		}
 
 		$builder = $this->assets->with_script($config['url']);
 
@@ -79,7 +84,11 @@ class Test_withScript extends TestCase {
 			$builder = $builder->enqueue();
 		}
 
-		if($config['enqueue']) {
+		if($config['register']) {
+			$builder = $builder->register();
+		}
+
+		if($config['enqueue'] || $config['register']) {
 			$this->assertSame($expected['return'], $builder);
 		} else {
 			$this->assertInstanceOf($expected['return'], $builder);

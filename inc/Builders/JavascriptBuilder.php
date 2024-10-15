@@ -54,6 +54,6 @@ class JavascriptBuilder extends AssetBuilder {
 		list($script_url, $dependencies) = $this->fetch_real_script($this->url, $this->dependencies, $this->in_footer);
 
 		wp_register_script($key, $script_url, $dependencies, $this->plugin_version, $this->in_footer);
-		return $this->get_full_key($key);
+		return $key;
 	}
 }
