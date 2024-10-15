@@ -99,7 +99,7 @@ return [
 			'return' => 'plugin_slugmy_key',
 		]
 	],
-	'enqueueShouldCallQueueFunction' => [
+	'affectKeyAndEnqueueShouldCallQueueFunction' => [
 		'config' => [
 			'plugin_url' => 'http://example.org/wp-content/plugin',
 			'enqueue' => true,
