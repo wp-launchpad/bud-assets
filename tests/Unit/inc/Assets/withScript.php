@@ -2,6 +2,7 @@
 
 namespace LaunchpadBudAssets\Tests\Unit\inc\Assets;
 
+use LaunchpadBudAssets\Builders\AvailabilityQuery;
 use LaunchpadBudAssets\Builders\JavascriptBuilder;
 use Mockery;
 use LaunchpadBudAssets\Assets;
@@ -63,6 +64,7 @@ class Test_withScript extends TestCase {
     {
 		Functions\when('plugin_dir_url')->justReturn($config['plugin_url']);
 		Functions\when('sanitize_key')->returnArg();
+		Functions\when('is_tax')->justReturn($expected['is_tax']);
 
 		$this->configureFilesystem($config, $expected);
 
@@ -81,6 +83,15 @@ class Test_withScript extends TestCase {
 		$builder = $this->assets->with_script($config['url']);
 
 		$builder->with_key($config['key']);
+
+		if(count($config['taxonomies'])) {
+			$builder = $builder->with_query(function (AvailabilityQuery $query) use ($config) {
+				foreach ($config['taxonomies'] as $taxonomy) {
+					$query->with_taxonomy($taxonomy);
+				}
+				return $query;
+			});
+		}
 
 		if($config['enqueue']) {
 			$builder = $builder->enqueue();

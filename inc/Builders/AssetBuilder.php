@@ -61,23 +61,14 @@ abstract class AssetBuilder {
 	protected $plugin_launcher_file = '';
 
 	/**
-	 * Generate a new query.
-	 *
-	 * @return AvailabilityQuery
-	 */
-	public function get_query(): AvailabilityQuery {
-		return new AvailabilityQuery();
-	}
-
-	/**
 	 * Uses a query to add the assets.
 	 *
-	 * @param AvailabilityQuery $query Query to load the asset.
+	 * @param callable(AvailabilityQuery): void $query_setup Callback set up the query.
 	 *
 	 * @return $this
 	 */
-	public function with_query(AvailabilityQuery $query): self {
-		$this->queries []= $query;
+	public function with_query(callable $query_setup): self {
+		$this->queries []= $query_setup(new AvailabilityQuery());
 		return $this;
 	}
 
